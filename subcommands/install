@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+# If a buildpack name was specified
+if [[ -n $2 ]]; then
+
+  case "$2" in
+    git:*|ssh:*|*@*:*|http:*|https:*)
+      remote=$2
+      defname=${2#*:}
+      defname=${defname##*/}
+      ;;
+    */*)
+      remote=https://github.com/$2.git
+      defname=${2##*/}
+      ;;
+  esac
+
+  defname=${defname%.git}
+  buildpack=${3:-$defname}
+  buildpack_dir="$PLUSHU_BUILDPACKS_DIR/$buildpack"
+
+  # If the buildpack already exists
+  if [[ -e "$buildpack_dir" ]]; then
+    cat >&2 <<EOF
+Buildpack '$buildpack' is already installed.
+EOF
+    exit 1
+
+  # If the buildpack isn't already installed, install it
+  else
+    "$PLUSHU_ROOT/lib/plushook" install-buildpack "$buildpack" "$remote"
+  fi
+
+# If no buildpack name was specified
+else
+  echo "Missing name of buildpack to install" >&2
+  exit 1
+fi

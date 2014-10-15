@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+buildpack=$1
+buildpack_dir=$PLUSHU_BUILDPACKS_DIR/$buildpack
+
+disabled_buildpacks_dir=$PLUSHU_DIR/disabled-buildpacks
+
+# If the buildpack exists and is enabled
+if [[ -d "$buildpack_dir" ]]; then
+
+  # Ensure the disabled buildpacks dir exists
+  mkdir -p "$disabled_buildpacks_dir"
+
+  # Disable the buildpack
+  mv "$buildpack_dir" "$disabled_buildpacks_dir/$buildpack"
+fi

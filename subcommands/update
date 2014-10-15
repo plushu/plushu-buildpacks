@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+# If at least one buildpack name was specified
+if [[ -n "$2" ]]; then
+  buildpacks=()
+  # For each buildpack specified
+  while [[ -n "$2" ]]; do
+    # If that buildpack exists
+    if [[ -d "$PLUSHU_BUILDPACKS_DIR/$2" ]]; then
+      # Add it to the update list
+      buildpacks+=("$PLUSHU_BUILDPACKS_DIR/$2")
+
+    # If that buildpack does not exist
+    else
+      echo "Buildpack not found: $2" >&2
+      exit 1
+    fi
+    shift
+  done
+  # Update each buildpack to update
+  for buildpack in "${buildpacks[@]}"; do
+    "$PLUSHU_ROOT/lib/plushook" update-buildpack "${buildpack##*/}"
+  done
+# If no buildpack name was specified
+else
+  # Update ALL the buildpacks
+  "$PLUSHU_ROOT/lib/plushook" update-all-buildpacks
+fi

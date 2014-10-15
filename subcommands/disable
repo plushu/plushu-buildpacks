@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+disabled_buildpacks_dir=$PLUSHU_DIR/disabled-buildpacks
+
+# If no buildpack name was specified
+if [[ -z "$2" ]]; then
+  echo "Missing name of buildpack to disable" >&2
+  exit 1
+fi
+
+# For each buildpack specified
+while [[ -n "$2" ]]; do
+
+  # If that buildpack exists
+  if [[ -d "$PLUSHU_BUILDPACKS_DIR/$2" ]]; then
+    "$PLUSHU_ROOT/lib/plushook" disable-buildpack "$2"
+
+  # If that buildpack does not exist
+  else
+    echo "Buildpack not found: $2" >&2
+    exit 1
+  fi
+  shift
+done

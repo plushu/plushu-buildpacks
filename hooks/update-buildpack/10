@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+buildpack=$1
+buildpack_dir="$PLUSHU_BUILDPACKS_DIR/$buildpack"
+
+# If the buildpack exists
+if [[ -d "$buildpack_dir" ]]; then
+  # Expose stdout on fd 3
+  exec 3>&1
+
+  # Retrieve it
+  "$PLUSHU_ROOT/lib/plushook" update-dir "$buildpack_dir" "$buildpack" |
+  while read -a update; do
+    # If the buildpack was updated
+    if [[ -n "${update[1]}" ]]; then
+      # If this buildpack has an update script
+      if [[ -f ./update ]]; then
+
+        # We don't test for executable status, we just
+        # let the shell fail if the update script isn't set executable
+        PLUSHU_BUILDPACK_NAME=$buildpack PLUSHU_BUILDPACK_PATH=$buildpack_dir \
+          ./update "${update[@]}"
+      fi
+    # Otherwise, mention the system declaring it to be up to date
+    else
+      echo "${update[0]}: $buildpack is up to date"
+    fi
+  done
+fi

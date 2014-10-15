@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+# If no buildpack name was specified
+if [[ -z "$2" ]]; then
+  echo "Missing name of buildpack to uninstall" >&2
+  exit 1
+fi
+
+# For each buildpack specified
+while [[ -n "$2" ]]; do
+
+  # If that buildpack exists, uninstall it
+  if [[ -d "$PLUSHU_BUILDPACKS_DIR/$2" ]]; then
+    "$PLUSHU_ROOT/lib/plushook" uninstall-buildpack "$2"
+
+  # If that buildpack does not exist
+  else
+    echo "Buildpack not found: $2" >&2
+    exit 1
+  fi
+  shift
+done
