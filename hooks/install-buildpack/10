@@ -16,9 +16,8 @@ if [[ ! -e "$buildpack_dir" ]]; then
   if [[ ! -e "$buildpack_dir" ]]; then
     echo "URL could not be retrieved: $remote" >&2
     exit 1
-
+  else
     # Notify that the buildpack has been installed
-    # in lieu of a more complex
     echo "Buildpack '$buildpack' installed."
   fi
 fi

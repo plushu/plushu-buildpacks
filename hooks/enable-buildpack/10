@@ -7,6 +7,6 @@ disabled_buildpack_dir=$PLUSHU_DIR/disabled-buildpacks/$buildpack
 # If the buildpack exists and is disabled
 if [[ -d "$disabled_buildpacks_dir" ]]; then
 
-    # Enable the buildpack
-    mv "$disabled_buildpack_dir" "$PLUSHU_BUILDPACKS_DIR/$buildpack"
+  # Enable the buildpack
+  mv "$disabled_buildpack_dir" "$PLUSHU_BUILDPACKS_DIR/$buildpack"
 fi
