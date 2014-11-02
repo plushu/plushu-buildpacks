@@ -17,7 +17,11 @@ if [[ -n $2 ]]; then
   esac
 
   defname=${defname%.git}
-  buildpack=${3:-$defname}
+  buildpack=$3
+  if [[ -z "$buildpack" ]]; then
+    n=$(ls -f "$PLUSHU_BUILDPACKS_DIR" | wc -l)
+    buildpack=$(printf '%02i_%s' "$n" "$defname")
+  fi
   buildpack_dir="$PLUSHU_BUILDPACKS_DIR/$buildpack"
 
   # If the buildpack already exists
