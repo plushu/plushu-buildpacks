@@ -17,15 +17,6 @@ if [[ ! -e "$buildpack_dir" ]]; then
     echo "URL could not be retrieved: $remote" >&2
     exit 1
 
-  # If the newly-cloned buildpack has an install script
-  elif [[ -f "$PLUSHU_BUILDPackS_DIR/$buildpack/install" ]]; then
-
-    # We don't test for executable status, we just
-    # let the shell fail if the install script isn't set executable
-    PLUSHU_BUILDPACK_NAME="$buildpack" PLUSHU_BUILDPACK_PATH="$buildpack_dir" \
-      "$buildpack_dir/install"
-
-  else
     # Notify that the buildpack has been installed
     # in lieu of a more complex
     echo "Buildpack '$buildpack' installed."

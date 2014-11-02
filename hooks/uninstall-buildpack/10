@@ -7,15 +7,6 @@ buildpack_dir=$PLUSHU_BUILDPACKS_DIR/$buildpack
 # If the buildpack exists
 if [[ -d "$buildpack_dir" ]]; then
 
-  # If the buildpack has an uninstall script
-  if [[ -f "$buildpack_dir/uninstall" ]]; then
-
-    # We don't test for executable status, we just
-    # let the shell fail if the uninstall script isn't set executable
-    PLUSHU_BUILDPACK_NAME="$buildpack" PLUSHU_BUILDPACK_PATH="$buildpack_dir" \
-      "$buildpack_dir/uninstall"
-  fi
-
   # Remove the buildpack
   rm -rf "$buildpack_dir"
   echo "Buildpack '$buildpack' uninstalled."
