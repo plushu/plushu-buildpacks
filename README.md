@@ -18,3 +18,11 @@ repository name.
 Usage: `plushu buildpacks:uninstall <buildpack>`
 
 Removes the buildpack's directory.
+
+## Installing buildpacks from a list
+
+```bash
+while read buildpack; do
+  plushu buildpacks:install $buildpack
+done < buildpacks.txt
+```
